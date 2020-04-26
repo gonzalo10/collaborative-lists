@@ -1,16 +1,45 @@
 import React, { useEffect } from 'react';
 
+const parseMovieTitle = (movie: string) => {
+	return movie.replace(' ', '-');
+};
+
 const Books: React.FC = () => {
 	const handleClick = () => {};
+
+	const getMovieAPI = async () => {
+		const response = await fetch('/api/getMovie', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				movie: parseMovieTitle('house of cards')
+			})
+		});
+		const parsedResponse = await response.json();
+		console.log({ parsedResponse });
+	};
+	const createMovieList = async () => {
+		const response = await fetch('/api/createMovieList', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				title: 'Gonzalo list'
+			})
+		});
+		const parsedResponse = await response.json();
+		console.log(parsedResponse.value.id);
+	};
 	useEffect(() => {
-		fetch('https://v2.sg.media-imdb.com/suggestion/h/house.json')
-			.then((response) => response.json)
-			.then((result) => console.log(result));
+		getMovieAPI();
 	}, []);
 	return (
 		<div>
 			Books
-			<button onClick={handleClick}>CreateList</button>
+			<button onClick={createMovieList}>CreateList</button>
 		</div>
 	);
 };

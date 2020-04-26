@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import Header from './Components/Header';
 import Movies from './Pages/Movies';
+import MovieList from './Pages/movie-list';
 import Home from './Pages/Home';
 import Books from './Pages/Books';
 
@@ -20,8 +21,11 @@ const App = () => {
 					<Route exact path='/'>
 						<Home />
 					</Route>
-					<Route path='/movies'>
+					<Route exact path='/movies'>
 						<Movies />
+					</Route>
+					<Route path='/movies/:id'>
+						<MovieList />
 					</Route>
 					<Route path='/books'>
 						<Books />
