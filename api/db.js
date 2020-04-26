@@ -1,5 +1,5 @@
-import faunadb from 'faunadb';
 import dotenv from 'dotenv';
+import faunadb from 'faunadb';
 
 dotenv.config();
 
@@ -8,23 +8,10 @@ const client = new faunadb.Client({
 });
 const q = faunadb.query;
 
-const getMovieList = client
-	.query(q.Paginate(q.Match(q.Ref('indexes/all_articles'))))
-	.then((response) => {
-		const notesRefs = response.data;
-
-		const getAllProductDataQuery = notesRefs.map((ref) => {
-			return q.Get(ref);
-		});
-		return client.query(getAllProductDataQuery).then((data) => data);
-	})
-	.catch((error) => console.warn('error', error.message));
-
 const addMoveToList = (listId, movieId) =>
 	client
 		.query(q.Get(q.Ref(q.Collection('movie_list'), listId)))
 		.then((ret) => {
-			console.log(ret.data.movies);
 			const movies = ret.data.movies;
 			return client
 				.query(
@@ -50,6 +37,11 @@ const createNewList = (title = 'my movie list', movies = {}) =>
 		)
 		.then((ret) => ret)
 		.catch((err) => console.warn('db error', err));
+
+const getMovieList = (listId) =>
+	client
+		.query(q.Get(q.Ref(q.Collection('movie_list'), listId)))
+		.then((res) => res);
 
 module.exports = {
 	addMoveToList,
