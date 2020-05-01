@@ -12,8 +12,10 @@
     "@types/react-dom": "^16.9.0",
     "assign-symbols": "^2.0.2",
     "axios": "^0.19.2",
+    "cheerio": "^1.0.0-rc.3",
     "dotenv": "^8.2.0",
     "faunadb": "^2.13.1",
+    "lodash.debounce": "^4.0.8",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2",
@@ -43,6 +45,7 @@
     ]
   },
   "devDependencies": {
+    "@types/lodash.debounce": "^4.0.6",
     "@types/react-router-dom": "^5.1.4",
     "@types/styled-components": "^5.1.0"
   }

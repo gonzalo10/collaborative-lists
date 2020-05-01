@@ -8,7 +8,7 @@ const client = new faunadb.Client({
 });
 const q = faunadb.query;
 
-const addMoveToList = (listId, movieId) =>
+const addMoveToList = (listId, movieId, movieRaiting) =>
 	client
 		.query(q.Get(q.Ref(q.Collection('movie_list'), listId)))
 		.then((ret) => {
@@ -17,7 +17,28 @@ const addMoveToList = (listId, movieId) =>
 				.query(
 					q.Update(q.Ref(q.Collection('movie_list'), listId), {
 						data: {
-							movies: [...movies, movieId]
+							movies: [...movies, { movieId, movieRaiting }]
+						}
+					})
+				)
+				.then((ret) => ret);
+		})
+		.catch((err) => console.warn('db error', err));
+const deleteMovieFromList = (listId, movieId) =>
+	client
+		.query(q.Get(q.Ref(q.Collection('movie_list'), listId)))
+		.then((ret) => {
+			const movies = ret.data.movies;
+			console.log({ movies });
+			const updatedMovieList = movies.filter(
+				(movie) => movie.movieId !== movieId
+			);
+			console.log({ updatedMovieList, movieId });
+			return client
+				.query(
+					q.Update(q.Ref(q.Collection('movie_list'), listId), {
+						data: {
+							movies: updatedMovieList
 						}
 					})
 				)
@@ -46,5 +67,6 @@ const getMovieList = (listId) =>
 module.exports = {
 	addMoveToList,
 	createNewList,
-	getMovieList
+	getMovieList,
+	deleteMovieFromList
 };
